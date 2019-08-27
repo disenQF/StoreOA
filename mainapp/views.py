@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.db.models import Count, Sum, Min, Max, Avg
 
 from mainapp.models import UserEntity, FruitEntity, StoreEntity
 
@@ -127,5 +128,37 @@ def find_fruit(request):
 def find_store(request):
     # 查询2019年开业的水果店
     # 查询参数： year, month
-    stores = StoreEntity.objects.filter(create_time__month__lt=6).all()
+    queryset = StoreEntity.objects.filter(create_time__month__lt=6).order_by('-id', 'city')
+
+    first_store = queryset.first()  # 模型类的实例对象
+    print(first_store)
+    stores = queryset.all().filter(city='西安')  # ?? 返回还是queryset吗?
     return render(request,'store/list.html', locals())
+
+def all_store(request):
+    # 返回所有水果店的json 数据
+    result = {}
+    if StoreEntity.objects.exists():
+        datas = StoreEntity.objects.values()
+        print(type(datas))  # list[{}, {}] ??  QuerySet<{}, {}>
+
+        store_list = []
+        for store in datas:
+            store_list.append(store)
+
+        result['data'] = store_list
+        result['total'] = StoreEntity.objects.count()
+
+    else:
+        result['msg'] = '数据是空的'
+
+    return JsonResponse(result)
+
+def count_fruit(request):
+    # 返回json数据： 统计每种分类的水果数量 、最高价格、最低价格和总价格
+    result = FruitEntity.objects.aggregate(cnt=Count('name'),
+                                           max=Max('price'),
+                                           min=Min('price'),
+                                           avg=Avg('price'),
+                                           total=Sum('price'))
+    return JsonResponse(result)

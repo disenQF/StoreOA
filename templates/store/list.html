@@ -7,9 +7,14 @@
     <title>水果店</title>
 </head>
 <body>
+    <p style="color:blue;">
+        <span>{{ first_store.name }}</span>
+        <span> {{ first_store.city }}</span>
+        <span> {{ first_store.address }}</span>
+    </p>
     <ul>
         {% for store in stores %}
-            <li>{{ store.name }} - {{ store.create_time }}</li>
+            <li>{{ forloop.counter }} {{ store.name }}:{{ store.city }} - {{ store.create_time }}</li>
         {% endfor %}
 
     </ul>
