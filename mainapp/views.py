@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from mainapp.models import UserEntity
+from mainapp.models import UserEntity, FruitEntity, StoreEntity
+
+
 # Create your views here.
 
 def user_list(request):
@@ -107,3 +109,23 @@ def user_list3(request):
     return render(request,
                   'user/list.html', locals())
 
+def find_fruit(request):
+    # 从查询参数中获取价格区间[price1, price2]
+    price1 = request.GET.get('price1', 0)
+    price2 = request.GET.get('price2', 1000)
+
+    # 根据价格区别查询满足条件所有水果信息
+    fruits = FruitEntity.objects.filter(price__gte=price1,
+                                        price__lte=price2)\
+        .exclude(price=250)\
+        .filter(name__contains='果') \
+        .all()
+
+    # 将查询的数据渲染到html模板中
+    return render(request, 'fruit/list.html', locals())
+
+def find_store(request):
+    # 查询2019年开业的水果店
+    # 查询参数： year, month
+    stores = StoreEntity.objects.filter(create_time__month__lt=6).all()
+    return render(request,'store/list.html', locals())

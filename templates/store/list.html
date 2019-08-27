@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>水果店</title>
+</head>
+<body>
+    <ul>
+        {% for store in stores %}
+            <li>{{ store.name }} - {{ store.create_time }}</li>
+        {% endfor %}
+
+    </ul>
+</body>
+</html>

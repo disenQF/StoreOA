@@ -30,10 +30,13 @@ class CateTypeEntity(models.Model):
                             verbose_name='分类名')
     order_num = models.IntegerField(verbose_name='排序')
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 
     class Meta:
+        app_label = 'mainapp'  # 指定应用的名称
         db_table = 't_category'
         ordering = ['-order_num']  # 指定排序字段， - 表示降序
         verbose_name = '水果分类'
@@ -106,6 +109,10 @@ class StoreEntity(models.Model):
     last_time = models.DateTimeField(verbose_name='最后变更时间',
                                  auto_now=True,
                                  null=True)
+    @property
+    def open_time(self):
+        print(self.create_time)
+        return self.create_time
 
     # 站点显示对象的字符串信息
     def __str__(self):

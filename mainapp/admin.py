@@ -18,7 +18,7 @@ class FruitAdmin(admin.ModelAdmin):
     list_display = ('name', 'source', 'price', 'category')
 
 class StoreAdmin(admin.ModelAdmin):
-    list_display = ('id_', 'name', 'city', 'address', 'store_type', 'logo')
+    list_display = ('id_', 'name', 'city', 'address', 'store_type', 'logo', 'open_time')
     # 指定表单修改的字段
     fields = ('name', 'city', 'address', 'store_type', 'logo', 'summary')
 
