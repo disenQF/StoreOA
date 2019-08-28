@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.db.models import Count, Sum, Min, Max, Avg
+from django.db.models import Count, Sum, Min, Max, Avg, F, Q
 
 from mainapp.models import UserEntity, FruitEntity, StoreEntity
 
@@ -31,6 +31,7 @@ def user_list2(request):
     return render(request,
                   'user/list.html', locals())
 
+
 def add_user(request):
     # 从GET请求中读取数据
     # request.GET.get('name')
@@ -39,7 +40,6 @@ def add_user(request):
     name = request.GET.get('name', None)
     age = request.GET.get('age', 0)
     phone = request.GET.get('phone', None)
-
 
     # 验证是否数据是否完整
     if not all((name, age, phone)):
@@ -52,6 +52,7 @@ def add_user(request):
     u1.phone = phone
     u1.save()
     return redirect('/user/list')
+
 
 def update_user(request):
     # 查询参数有id, name, phone
@@ -66,7 +67,7 @@ def update_user(request):
 
         name = request.GET.get('name', None)
         phone = request.GET.get('phone', None)
-        if any((name, phone)): # name 或 phone 任意一个存在即可
+        if any((name, phone)):  # name 或 phone 任意一个存在即可
             if name:
                 user.name = name
 
@@ -79,6 +80,7 @@ def update_user(request):
     except:
         return HttpResponse('%s 的用户是不存在的' % id,
                             status=404)
+
 
 def delete_user(request):
     # 查询参数有id
@@ -100,15 +102,17 @@ def delete_user(request):
             """ % id
             return HttpResponse(html)
         except:
-            return HttpResponse('%s 不存在' %id)
+            return HttpResponse('%s 不存在' % id)
     else:
         return HttpResponse('必须提供id参数')
+
 
 def user_list3(request):
     users = UserEntity.objects.all()
     msg = '最优秀的学员'
     return render(request,
                   'user/list.html', locals())
+
 
 def find_fruit(request):
     # 从查询参数中获取价格区间[price1, price2]
@@ -117,13 +121,14 @@ def find_fruit(request):
 
     # 根据价格区别查询满足条件所有水果信息
     fruits = FruitEntity.objects.filter(price__gte=price1,
-                                        price__lte=price2)\
-        .exclude(price=250)\
+                                        price__lte=price2) \
+        .exclude(price=250) \
         .filter(name__contains='果') \
         .all()
 
     # 将查询的数据渲染到html模板中
     return render(request, 'fruit/list.html', locals())
+
 
 def find_store(request):
     # 查询2019年开业的水果店
@@ -133,7 +138,8 @@ def find_store(request):
     first_store = queryset.first()  # 模型类的实例对象
     print(first_store)
     stores = queryset.all().filter(city='西安')  # ?? 返回还是queryset吗?
-    return render(request,'store/list.html', locals())
+    return render(request, 'store/list.html', locals())
+
 
 def all_store(request):
     # 返回所有水果店的json 数据
@@ -154,11 +160,22 @@ def all_store(request):
 
     return JsonResponse(result)
 
+
 def count_fruit(request):
     # 返回json数据： 统计每种分类的水果数量 、最高价格、最低价格和总价格
     result = FruitEntity.objects.aggregate(cnt=Count('name'),
-                                           max=Max('price'),
-                                           min=Min('price'),
-                                           avg=Avg('price'),
                                            total=Sum('price'))
-    return JsonResponse(result)
+
+    # 中秋节： 全场水果打8.8折扣
+    # FruitEntity.objects.update(price=F('price')*0.88)
+    fruits = FruitEntity.objects.values()  # QuerySet
+
+    # 查询价格低于1的，或高于200的水果, 或源产地是西安且名字中包含"果"
+    fruits2 = FruitEntity.objects.filter(
+        Q(price__lte=1) | Q(price__gte=200) | Q(Q(source='西安') & Q(name__contains="果"))).values()
+
+    return JsonResponse({
+        'count': result,
+        'fruits': [fruit for fruit in fruits],  # 迭代QuerySet中每一项都是dict
+        'multi_query': [fruit for fruit in fruits2]
+    })
