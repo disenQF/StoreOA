@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from mainapp.models import UserEntity, CateTypeEntity, FruitEntity, StoreEntity
+from mainapp.models import RealProfile
 
 # Register your models here.
 
@@ -22,8 +23,12 @@ class StoreAdmin(admin.ModelAdmin):
     # 指定表单修改的字段
     fields = ('name', 'city', 'address', 'store_type', 'logo', 'summary')
 
+class RealProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'real_name', 'number', 'real_type')
+
 # 将模型增加到站点中
 admin.site.register(UserEntity, UserAdmin)
 admin.site.register(CateTypeEntity, CateTypeAdmin)
 admin.site.register(FruitEntity, FruitAdmin)
 admin.site.register(StoreEntity, StoreAdmin)
+admin.site.register(RealProfile, RealProfileAdmin)

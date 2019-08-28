@@ -24,6 +24,34 @@ class UserEntity(models.Model):
         # 设置复数的表示方式
         verbose_name_plural = verbose_name
 
+class RealProfile(models.Model):
+    # 声明一对一的关联关系
+    user = models.OneToOneField(UserEntity,
+                                verbose_name='账号',
+                                on_delete=models.CASCADE)
+
+    real_name = models.CharField(max_length=20,
+                                 verbose_name='真实姓名')
+    number = models.CharField(max_length=30,
+                              verbose_name='证件号')
+
+    real_type = models.IntegerField(verbose_name='证件类型',
+                                    choices=((0, '身份证'),
+                                             (1, '护照'),
+                                             (2, '驾驶证')))
+
+    image1 = models.ImageField(verbose_name='正面照',
+                               upload_to='user/real')
+    image2 = models.ImageField(verbose_name='反面照',
+                               upload_to='user/real')
+
+    def __str__(self):
+        return self.real_name
+
+    class Meta:
+        db_table = 't_user_profile'
+        verbose_name = verbose_name_plural = '实名认证表'
+
 # 水果分类模型
 class CateTypeEntity(models.Model):
     name = models.CharField(max_length=20,

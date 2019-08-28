@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 
 class BaseModel(models.Model):
@@ -10,6 +11,11 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True  # 抽象的模型类，即不会创建表
 
+# 声明QuerySet或Manager的子类
+class OrderManager(models.Manager):
+    # 获取查询结果集对象QuerySet
+    def get_queryset(self):
+        return super().get_queryset().filter(~Q(pay_status=5))
 
 # Create your models here.
 class OrderModel(BaseModel):
@@ -42,6 +48,8 @@ class OrderModel(BaseModel):
     receiver_phone = models.CharField(max_length=11,
                                       verbose_name='收货人的手机')
     receive_address = models.TextField(verbose_name='收货地址')
+
+    objects = OrderManager()  # 显性创建 objects
 
     def __str__(self):
         return self.title
