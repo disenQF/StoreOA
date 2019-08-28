@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 
+
 # Create your models here.
 # 客户的用户表
 class UserEntity(models.Model):
@@ -11,7 +12,7 @@ class UserEntity(models.Model):
                               verbose_name='年龄')
     phone = models.CharField(max_length=11,
                              verbose_name='手机号',
-                             blank=True, # 站点的表单字段值可以为空
+                             blank=True,  # 站点的表单字段值可以为空
                              null=True)  # 数据表的字段可以是null值
 
     def __str__(self):
@@ -23,6 +24,7 @@ class UserEntity(models.Model):
         verbose_name = '客户管理'
         # 设置复数的表示方式
         verbose_name_plural = verbose_name
+
 
 class RealProfile(models.Model):
     # 声明一对一的关联关系
@@ -52,6 +54,24 @@ class RealProfile(models.Model):
         db_table = 't_user_profile'
         verbose_name = verbose_name_plural = '实名认证表'
 
+
+class CartEntity(models.Model):
+    class Meta:
+        db_table = 't_cart'
+        verbose_name = verbose_name_plural = '购物车表'
+
+    user = models.OneToOneField(UserEntity,
+                                on_delete=models.CASCADE,
+                                verbose_name='账号')
+
+    no = models.CharField(primary_key=True,
+                          max_length=10,
+                          verbose_name='购物车编号')
+
+    def __str__(self):
+        return self.no
+
+
 # 水果分类模型
 class CateTypeEntity(models.Model):
     name = models.CharField(max_length=20,
@@ -79,15 +99,45 @@ class FruitEntity(models.Model):
                               verbose_name='源产地')
 
     category = models.ForeignKey(CateTypeEntity,
-                                 on_delete=models.CASCADE )
+                                 on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name+"-"+self.source+":"+str(self.price)
+        return self.name
 
     class Meta:
         db_table = 't_fruit'
         verbose_name = '水果表'
         verbose_name_plural = verbose_name
+
+
+# 声明水果商品与购物车的关系表
+class FruitCartEntity(models.Model):
+    cart = models.ForeignKey(CartEntity,
+                             on_delete=models.CASCADE,
+                             verbose_name='购物车')
+
+    fruit = models.ForeignKey(FruitEntity,
+                              on_delete=models.CASCADE,
+                              verbose_name='水果名')
+    cnt = models.IntegerField(verbose_name='数量',
+                              default=1)
+
+    def __str__(self):
+        return self.fruit.name +':'+self.cart.no
+
+    @property
+    def price1(self):
+        # 属性方法在后台显示时没有verbose_name, 如何解决？
+        return self.fruit.price  # 从获取主的对象属性
+
+    @property
+    def price(self):
+        # 属性方法在后台显示时没有verbose_name, 如何解决？
+        return round(self.cnt*self.fruit.price, 2)
+
+    class Meta:
+        db_table = 't_fruit_cart'
+        verbose_name_plural = verbose_name = '购物车详情表'
 
 class StoreEntity(models.Model):
     # 默认情况下，模型自动创建主键id字段--隐式
@@ -135,8 +185,9 @@ class StoreEntity(models.Model):
                                        null=True)
 
     last_time = models.DateTimeField(verbose_name='最后变更时间',
-                                 auto_now=True,
-                                 null=True)
+                                     auto_now=True,
+                                     null=True)
+
     @property
     def open_time(self):
         print(self.create_time)
@@ -144,7 +195,7 @@ class StoreEntity(models.Model):
 
     # 站点显示对象的字符串信息
     def __str__(self):
-        return self.name+"-"+self.city
+        return self.name + "-" + self.city
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -161,6 +212,6 @@ class StoreEntity(models.Model):
 
     class Meta:  # 元数据
         db_table = 't_store'
-        unique_together = (('name', 'city'), )
+        unique_together = (('name', 'city'),)
         verbose_name = '水果店'
         verbose_name_plural = verbose_name
