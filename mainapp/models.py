@@ -54,7 +54,7 @@ class FruitEntity(models.Model):
                                  on_delete=models.CASCADE )
 
     def __str__(self):
-        return self.name+"-"+self.source
+        return self.name+"-"+self.source+":"+str(self.price)
 
     class Meta:
         db_table = 't_fruit'

@@ -172,7 +172,8 @@ def count_fruit(request):
 
     # 查询价格低于1的，或高于200的水果, 或源产地是西安且名字中包含"果"
     fruits2 = FruitEntity.objects.filter(
-        Q(price__lte=1) | Q(price__gte=200) | Q(Q(source='西安') & Q(name__contains="果"))).values()
+        Q(price__lte=1) | Q(price__gte=200) |
+        Q(Q(source='西安') & Q(name__contains="果"))).values()
 
     return JsonResponse({
         'count': result,
