@@ -102,7 +102,10 @@ class FruitEntity(models.Model):
     category = models.ForeignKey(CateTypeEntity,
                                  related_name='fruits',
                                  to_field='id',
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 blank=True,
+                                 null=True
+                                 )
 
     # 默认情况下，反向引用的名称是当前类的名称(小写)_set
     # 可以通过related_name 来指定
@@ -110,7 +113,16 @@ class FruitEntity(models.Model):
     users = models.ManyToManyField(UserEntity,
                                    db_table='t_collect',
                                    related_name='fruits',
-                                   verbose_name='收藏用户列表')
+                                   verbose_name='收藏用户列表',
+                                   blank=True,
+                                   null=True)
+
+    tags = models.ManyToManyField('TagEntity',
+                                  db_table='t_fruit_tags',
+                                  related_name='fruits',
+                                  verbose_name='所有标签',
+                                  blank=True,
+                                  null=True)
 
     def __str__(self):
         return self.name
@@ -119,6 +131,23 @@ class FruitEntity(models.Model):
         db_table = 't_fruit'
         verbose_name = '水果表'
         verbose_name_plural = verbose_name
+
+
+class TagEntity(models.Model):
+    name = models.CharField(max_length=50,
+                            unique=True,
+                            verbose_name='标签名')
+
+    order_num = models.IntegerField(default=1,
+                                    verbose_name='序号')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 't_tag'
+        verbose_name_plural = verbose_name = '标签表'
+        ordering = ['-order_num']
 
 
 # 声明水果商品与购物车的关系表

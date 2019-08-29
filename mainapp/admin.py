@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from mainapp.models import UserEntity, CateTypeEntity, FruitEntity, StoreEntity, CartEntity, FruitCartEntity
+from mainapp.models import UserEntity, CateTypeEntity, FruitEntity, StoreEntity, CartEntity, FruitCartEntity, TagEntity
 from mainapp.models import RealProfile
 
 # Register your models here.
@@ -43,7 +43,9 @@ class FruitCartEntityAdmin(admin.ModelAdmin):
     price1_title.short_description = '单价'
     price_title.short_description = '小计'
 
-
+class TagEntityAdmin(admin.ModelAdmin):
+    list_display = ('name', 'order_num')
+    fields =  ('name', 'order_num')
 
 
 # 将模型增加到站点中
@@ -54,3 +56,4 @@ admin.site.register(StoreEntity, StoreAdmin)
 admin.site.register(RealProfile, RealProfileAdmin)
 admin.site.register(CartEntity, CartEntityAdmin)
 admin.site.register(FruitCartEntity, FruitCartEntityAdmin)
+admin.site.register(TagEntity, TagEntityAdmin)
