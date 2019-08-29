@@ -1,11 +1,15 @@
 import logging
 import random
 
+from datetime import datetime
+
+import os
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Count, Sum, Min, Max, Avg, F, Q
 from django.template import loader
 
+from helloDjango import settings
 from mainapp.models import UserEntity, FruitEntity, StoreEntity
 
 
@@ -115,7 +119,7 @@ def user_list3(request):
     users = UserEntity.objects.all()
     msg = '最优秀的学员'
 
-    error_index = random.randint(0, users.count()-1)
+    # error_index = random.randint(0, users.count()-1)
 
     vip = {
         'name': 'disen',
@@ -131,9 +135,23 @@ def user_list3(request):
     #     'users': users
     # })
 
+    # names = ['Disen', 'Jack', 'Lucy']
+    names = []
+    info = '<h3>用户的个人简要</h3><p>我的家乡在西安</p><p>我爱好读书(Python相关)</p>'
+
+    now = datetime.now()
+
+    file_dir = os.path.join(settings.BASE_DIR, 'mainapp/')
+    files = {file_name: os.stat(file_dir+file_name)
+             for file_name in os.listdir(file_dir)
+             if os.path.isfile(file_dir+file_name)}
+
+    price = 19.1356
+
+    img_html = "<img width=200 height=200 src='/media/store/ms6.jpg' />"
+
     html = loader.render_to_string('user/list.html',
                                    locals())
-
     return HttpResponse(html,
                         status=200)  # 增加响应头？？
 

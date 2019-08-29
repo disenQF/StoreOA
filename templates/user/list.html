@@ -6,8 +6,25 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>主页</title>
     {% include 'base_css.html' %}
+    <style>
+        .even {
+            background-color: lightgoldenrodyellow;
+        }
+
+         .red {
+            background-color: red;
+        }
+
+         .blue {
+            background-color: blue;
+        }
+
+         .green {
+            background-color: green;
+        }
+    </style>
 </head>
-<body>
+<body class="container">
 <h3>{{ msg }}</h3>
 <p style="color: green">
     第三个用户名： {{ users.2.name }}
@@ -21,16 +38,82 @@
 </p>
 <ul>
     {% for key, value in vip.items %}
-       <li>{{ key }} = {{ value }}</li>
+        <li>{{ key }} = {{ value }}</li>
     {% endfor %}
 
 </ul>
-<ul>
-    {% for user in users %}
-        <li>{{ user.id }} {{ user.name }}</li>
+<table class="table table-bordered table-hover">
+    <thead>
+    <th>ID</th>
+    <th>账号</th>
+    <th>真实姓名</th>
+    <th>手机号</th>
+    </thead>
+    <tbody>
 
+    {% if users %}
+        {% for user in users %}
+{#  <tr class="{% cycle "red" "green" "blue"  %}">#}
+
+{#            <tr {% ifequal forloop.counter 3 %}class="even"{% endifequal %}>#}
+               <tr {% ifequal forloop.counter|divisibleby:2 0 %} class="even" {% endifequal %}>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.realprofile.real_name }}</td>
+                <td>{{ user.phone }}</td>
+            </tr>
+        {% endfor %}
+
+    {% else %}
+        <tr>
+            <td colspan="4">无数据</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+
+<select>
+    {% for name in names %}
+        <option>{{ name }}</option>
+
+        {% empty %}
+        <option>空</option>
     {% endfor %}
-</ul>
+</select>
+
+<!--  网页HTML的注释  -->
+{# 单行注释 #}
+{% comment %}
+for 循环+if条件
+{% endcomment %}
+
+{% autoescape on %}
+    <pre>
+        {{ info }}
+    </pre>
+{% endautoescape %}
+
+<p>
+{#  https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date #}
+    {{ now|date:"Y-m-d H:i:s" }}
+</p>
+
+<p>
+   价格： {{ price|floatformat:2 }}
+</p>
+
+<p>
+    {{ img_html|safe }}
+</p>
+
+
+{% for path, f_stat in files.items %}
+<p>
+    {{ path|ellipse }} 的文件大小 {{ f_stat.st_size|filesizeformat }}
+</p>
+
+{% endfor %}
+
 
 {% include 'base_js.html' %}
 </body>
