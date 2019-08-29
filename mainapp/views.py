@@ -1,8 +1,10 @@
 import logging
+import random
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Count, Sum, Min, Max, Avg, F, Q
+from django.template import loader
 
 from mainapp.models import UserEntity, FruitEntity, StoreEntity
 
@@ -110,11 +112,30 @@ def delete_user(request):
 
 
 def user_list3(request):
-    logging.getLogger('my').info('Hi, 测试日志, %s', 'disen')
     users = UserEntity.objects.all()
     msg = '最优秀的学员'
-    return render(request,
-                  'user/list.html', locals())
+
+    error_index = random.randint(0, users.count()-1)
+
+    vip = {
+        'name': 'disen',
+        'money': 20000
+    }
+
+    # # 加载模板
+    # template = loader.get_template('user/list.html')
+    #
+    # # 渲染模板
+    # html = template.render(context={
+    #     'msg': msg,
+    #     'users': users
+    # })
+
+    html = loader.render_to_string('user/list.html',
+                                   locals())
+
+    return HttpResponse(html,
+                        status=200)  # 增加响应头？？
 
 
 def find_fruit(request):

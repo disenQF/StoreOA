@@ -7,11 +7,33 @@
     <title>主页</title>
 </head>
 <body>
-  <h3>{{ msg }}</h3>
-  <ul>
-      {% for user in users %}
-         <li>{{ user.id }} {{ user.name }}</li>
-      {% endfor %}
-  </ul>
+<h3>{{ msg }}</h3>
+<p style="color: green">
+    第三个用户名： {{ users.2.name }}
+</p>
+<p style="color: red;">
+    请客的人： {{ error_index }}
+</p>
+<p style="color: white;background-color:blue;">
+    <span>VIP:</span>
+    <span>{{ vip.name.upper }}-{{ vip.money }}</span>
+</p>
+<ul>
+    {% for key, value in vip.items %}
+       <li>{{ key }} = {{ value }}</li>
+    {% endfor %}
+
+</ul>
+<ul>
+    {% for user in users %}
+        <li>{{ user.id }} {{ user.name }}</li>
+
+        {% if forloop.counter0 == error_index %}
+            <p style="color: red;">
+                请客的人： {{ user.name }}
+            </p>
+        {% endif %}
+    {% endfor %}
+</ul>
 </body>
 </html>

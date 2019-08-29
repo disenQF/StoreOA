@@ -103,8 +103,7 @@ class FruitEntity(models.Model):
                                  related_name='fruits',
                                  to_field='id',
                                  on_delete=models.CASCADE,
-                                 blank=True,
-                                 null=True
+                                 blank=True
                                  )
 
     # 默认情况下，反向引用的名称是当前类的名称(小写)_set
@@ -114,15 +113,13 @@ class FruitEntity(models.Model):
                                    db_table='t_collect',
                                    related_name='fruits',
                                    verbose_name='收藏用户列表',
-                                   blank=True,
-                                   null=True)
+                                   blank=True)
 
     tags = models.ManyToManyField('TagEntity',
                                   db_table='t_fruit_tags',
                                   related_name='fruits',
                                   verbose_name='所有标签',
-                                  blank=True,
-                                  null=True)
+                                  blank=True)
 
     def __str__(self):
         return self.name
