@@ -116,6 +116,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    # 配置静态资源的目录
+    os.path.join(BASE_DIR, 'static')
+]
 
 # 模型类中使用上传文件的字段时，文件访问路径是相对MEDIA
 MEDIA_URL = '/media/'

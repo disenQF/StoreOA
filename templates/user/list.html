@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>主页</title>
+    {% include 'base_css.html' %}
 </head>
 <body>
 <h3>{{ msg }}</h3>
@@ -28,12 +29,9 @@
     {% for user in users %}
         <li>{{ user.id }} {{ user.name }}</li>
 
-        {% if forloop.counter0 == error_index %}
-            <p style="color: red;">
-                请客的人： {{ user.name }}
-            </p>
-        {% endif %}
     {% endfor %}
 </ul>
+
+{% include 'base_js.html' %}
 </body>
 </html>
