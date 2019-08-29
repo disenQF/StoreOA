@@ -31,7 +31,19 @@ class CartEntityAdmin(admin.ModelAdmin):
 
 class FruitCartEntityAdmin(admin.ModelAdmin):
     # 显示字段可以引用关系实体对象的属性
-    list_display = ('cart', 'fruit', 'price1',  'cnt', 'price')
+    list_display = ('cart', 'fruit', 'price1_title',
+                    'cnt', 'price_title')
+
+    def price1_title(self, obj):
+        return obj.price1
+
+    def price_title(self, obj):
+        return obj.price
+
+    price1_title.short_description = '单价'
+    price_title.short_description = '小计'
+
+
 
 
 # 将模型增加到站点中

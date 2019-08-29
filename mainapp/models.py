@@ -98,8 +98,19 @@ class FruitEntity(models.Model):
     source = models.CharField(max_length=30,
                               verbose_name='源产地')
 
+    # 建议多对一的关联关系
     category = models.ForeignKey(CateTypeEntity,
+                                 related_name='fruits',
+                                 to_field='id',
                                  on_delete=models.CASCADE)
+
+    # 默认情况下，反向引用的名称是当前类的名称(小写)_set
+    # 可以通过related_name 来指定
+    # db_table='t_collect' 使用第三张表建立fruit和user的多对多关系
+    users = models.ManyToManyField(UserEntity,
+                                   db_table='t_collect',
+                                   related_name='fruits',
+                                   verbose_name='收藏用户列表')
 
     def __str__(self):
         return self.name
@@ -123,7 +134,7 @@ class FruitCartEntity(models.Model):
                               default=1)
 
     def __str__(self):
-        return self.fruit.name +':'+self.cart.no
+        return self.fruit.name + ':' + self.cart.no
 
     @property
     def price1(self):
@@ -133,11 +144,12 @@ class FruitCartEntity(models.Model):
     @property
     def price(self):
         # 属性方法在后台显示时没有verbose_name, 如何解决？
-        return round(self.cnt*self.fruit.price, 2)
+        return round(self.cnt * self.fruit.price, 2)
 
     class Meta:
         db_table = 't_fruit_cart'
         verbose_name_plural = verbose_name = '购物车详情表'
+
 
 class StoreEntity(models.Model):
     # 默认情况下，模型自动创建主键id字段--隐式

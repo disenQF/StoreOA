@@ -1,3 +1,5 @@
+import logging
+
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Count, Sum, Min, Max, Avg, F, Q
@@ -108,6 +110,7 @@ def delete_user(request):
 
 
 def user_list3(request):
+    logging.getLogger('my').info('Hi, 测试日志, %s', 'disen')
     users = UserEntity.objects.all()
     msg = '最优秀的学员'
     return render(request,
