@@ -1,6 +1,15 @@
 import uuid
 
+from django.contrib.auth.hashers import make_password
 from django.db import models
+
+
+class UserManager(models.Manager):
+    def update(self, **kwargs):
+        password = kwargs.get('password', None)
+        if password and len(password) < 50:
+            kwargs['password'] = make_password(password)
+        super().update(**kwargs)
 
 
 # Create your models here.
@@ -14,6 +23,20 @@ class UserEntity(models.Model):
                              verbose_name='手机号',
                              blank=True,  # 站点的表单字段值可以为空
                              null=True)  # 数据表的字段可以是null值
+    password = models.CharField(max_length=100,
+                                verbose_name='口令',
+                                blank=True,
+                                null=True)
+
+    objects = UserManager()
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if len(self.password)<50:
+            # 明文转密文
+            self.password = make_password(self.password)
+
+        super().save()
 
     def __str__(self):
         return self.name

@@ -11,15 +11,15 @@
             background-color: lightgoldenrodyellow;
         }
 
-         .red {
+        .red {
             background-color: red;
         }
 
-         .blue {
+        .blue {
             background-color: blue;
         }
 
-         .green {
+        .green {
             background-color: green;
         }
     </style>
@@ -53,10 +53,10 @@
 
     {% if users %}
         {% for user in users %}
-{#  <tr class="{% cycle "red" "green" "blue"  %}">#}
+            {#  <tr class="{% cycle "red" "green" "blue"  %}">#}
 
-{#            <tr {% ifequal forloop.counter 3 %}class="even"{% endifequal %}>#}
-               <tr {% ifequal forloop.counter|divisibleby:2 0 %} class="even" {% endifequal %}>
+            {#            <tr {% ifequal forloop.counter 3 %}class="even"{% endifequal %}>#}
+            <tr {% ifequal forloop.counter|divisibleby:2 0 %} class="even" {% endifequal %}>
                 <td>{{ user.id }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.realprofile.real_name }}</td>
@@ -76,7 +76,7 @@
     {% for name in names %}
         <option>{{ name }}</option>
 
-        {% empty %}
+    {% empty %}
         <option>空</option>
     {% endfor %}
 </select>
@@ -94,13 +94,36 @@ for 循环+if条件
 {% endautoescape %}
 
 <p>
-{#  https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date #}
+    {#  https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date #}
     {{ now|date:"Y-m-d H:i:s" }}
 </p>
 
 <p>
-   价格： {{ price|floatformat:2 }}
+    年 : {% now "Y-m-d H:i:s A" %}
 </p>
+
+<p>
+    价格： {{ price|floatformat:2 }}
+</p>
+<p>
+    价格： {{ price|safe }}
+</p>
+
+{% spaceless %}
+    <p>
+    <table>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>4</td>
+        </tr>
+    </table>
+    <a href="foo/">Foo</a>
+    </p>
+{% endspaceless %}
 
 <p>
     {{ img_html|safe }}
@@ -108,9 +131,9 @@ for 循环+if条件
 
 
 {% for path, f_stat in files.items %}
-<p>
-    {{ path|ellipse }} 的文件大小 {{ f_stat.st_size|filesizeformat }}
-</p>
+    <p>
+        {{ path|ellipse }} 的文件大小 {{ f_stat.st_size|filesizeformat }}
+    </p>
 
 {% endfor %}
 

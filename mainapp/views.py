@@ -114,7 +114,6 @@ def delete_user(request):
     else:
         return HttpResponse('必须提供id参数')
 
-
 def user_list3(request):
     users = UserEntity.objects.all()
     msg = '最优秀的学员'
