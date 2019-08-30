@@ -32,21 +32,14 @@ from django.urls import path, include
 #  请求体： body(字节类型)
 def index(request: HttpRequest):
 
-    # 加载数据模型
-    users = [
-        {'id': 1, 'name': 'disen'},
-        {'id': 2, 'name': 'jack'},
-        {'id': 3, 'name': '王小成'},
-    ]
-
     # return HttpResponse('<h1 style="color:green;">hi, Django</h1>')
     # 将数据渲染到模板中，并将渲染之后html响应给客户端
-    return render(request, 'index.html', {'users': users,'msg': '所有用户'})
+    return render(request, 'index.html',locals())
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index', index),
     # 配置子路由，
     # include()导入app模块下urls.py中声明的所有子路由
-    path('user/', include('mainapp.urls'))
+    path('user/', include('mainapp.urls')),
+    path('', index),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

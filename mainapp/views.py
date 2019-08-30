@@ -114,7 +114,7 @@ def delete_user(request):
     else:
         return HttpResponse('必须提供id参数')
 
-def user_list3(request):
+def user_list3(req):
     users = UserEntity.objects.all()
     msg = '最优秀的学员'
 
@@ -149,7 +149,7 @@ def user_list3(request):
 
     img_html = "<img width=200 height=200 src='/media/store/ms6.jpg' />"
 
-    html = loader.render_to_string('user/list.html',
+    html = loader.render_to_string('list.html',
                                    locals())
     return HttpResponse(html,
                         status=200)  # 增加响应头？？

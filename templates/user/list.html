@@ -26,6 +26,9 @@
 </head>
 <body class="container">
 <h3>{{ msg }}</h3>
+<p>
+    当前登录的用户： {{ req.session.login_user.name }}
+</p>
 <p style="color: green">
     第三个用户名： {{ users.2.name }}
 </p>

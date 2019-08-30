@@ -1,17 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>主页</title>
-</head>
-<body>
-  <h3>{{ msg }}</h3>
-  <ul>
-      {% for user in users %}
-         <li>{{ user.id }} {{ user.name }}</li>
-      {% endfor %}
-  </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block css %}
+    <style>
+        #logo{
+            margin: 0 10px;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <p>
+        网备IDC： 10109192929
+    </p>
+{% endblock %}

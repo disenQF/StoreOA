@@ -13,13 +13,13 @@
 
         <form class="form" method="post">
 
-             {% csrf_token %}
+            {# {% csrf_token %} #}
 
             <div class="form-group">
                 <div class="form-control">
                      <label class="col-xs-3 col-xs-push-2">账号</label>
                     <div class="col-xs-8">
-                        <input name="name" placeholder="用户名">
+                        <input name="name" placeholder="用户名" value="{{ name }}">
                     </div>
                 </div>
             </div>
@@ -37,6 +37,9 @@
                 <a class="btn btn-link" href="/user/regist">去注册</a>
             </div>
         </form>
+        <p class="text-danger">
+            {{ error_msg|safe }}
+        </p>
     </div>
 
     {% include 'base_js.html' %}
