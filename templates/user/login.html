@@ -1,47 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>用户登录</title>
-    {% include 'base_css.html' %}
-</head>
-<body>
+{% extends 'base.html' %}
+{% block css %}
+    <style>
+        form {
+            margin-left: 100px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <form class="form form-horizontal text-center"
+          method="post">
 
-    <div class="container">
+        {# {% csrf_token %} #}
 
-        <form class="form" method="post">
-
-            {# {% csrf_token %} #}
-
-            <div class="form-group">
-                <div class="form-control">
-                     <label class="col-xs-3 col-xs-push-2">账号</label>
-                    <div class="col-xs-8">
-                        <input name="name" placeholder="用户名" value="{{ name }}">
-                    </div>
-                </div>
+        <div class="form-group">
+            <label class="col-xs-2">账号</label>
+            <div class="col-xs-6">
+                <input name="name" class="form-control" placeholder="用户名" value="{{ name }}">
             </div>
-            <div class="form-group">
-                <div class="form-control">
-                    <label class="col-xs-3  col-xs-push-2" >口令</label>
-                    <div class="col-xs-8">
-                        <input  type="password" name="password" placeholder="口令">
-                    </div>
 
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 ">口令</label>
+            <div class="col-xs-6">
+                <input class="form-control" type="password" name="password" placeholder="口令">
             </div>
-            <div class="form-group">
-                <button class="btn btn-primary">登录</button>
-                <a class="btn btn-link" href="/user/regist">去注册</a>
-            </div>
-        </form>
-        <p class="text-danger">
+
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary">登录</button>
+            <a class="btn btn-link" href="/user/regist">去注册</a>
+        </div>
+        <p class="text-danger" style="margin: 10px">
             {{ error_msg|safe }}
         </p>
-    </div>
+    </form>
 
-    {% include 'base_js.html' %}
-</body>
-</html>
+{% endblock %}
