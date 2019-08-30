@@ -11,6 +11,14 @@
     </style>
 {% endblock %}
 
+{% block content %}
+
+    <p>
+        <a href="{% url 'orderapp:list' order_num=1002 city_code='xa' %}">订单</a>
+    </p>
+
+{% endblock %}
+
 {% block footer %}
     {{ block.super }}
     <p>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h3 style="color:red">
+
+        Sorry， 您请求的资源{{ request_path }}
+       发生异常，请稍后再试
+
+    </h3>
+    <p>
+        3秒之后自动跳转到<a href="/">主页</a>
+    </p>
+
+{% endblock %}

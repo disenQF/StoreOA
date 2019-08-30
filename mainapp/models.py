@@ -1,6 +1,9 @@
+import re
 import uuid
 
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+
 from django.db import models
 
 
@@ -12,6 +15,13 @@ class UserManager(models.Manager):
         super().update(**kwargs)
 
 
+class UserValidator:
+    @classmethod
+    def valid_phone(cls, value):
+        if not re.match(r'1[1-57-9]\d{9}', value):
+            raise ValidationError('手机格式不正确')
+        return True
+
 # Create your models here.
 # 客户的用户表
 class UserEntity(models.Model):
@@ -19,10 +29,13 @@ class UserEntity(models.Model):
                             verbose_name='账号')
     age = models.IntegerField(default=0,
                               verbose_name='年龄')
+
     phone = models.CharField(max_length=11,
                              verbose_name='手机号',
+                             validators=[UserValidator.valid_phone],
                              blank=True,  # 站点的表单字段值可以为空
                              null=True)  # 数据表的字段可以是null值
+
     password = models.CharField(max_length=100,
                                 verbose_name='口令',
                                 blank=True,

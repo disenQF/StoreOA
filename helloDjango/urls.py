@@ -41,5 +41,6 @@ urlpatterns = [
     # 配置子路由，
     # include()导入app模块下urls.py中声明的所有子路由
     path('user/', include('mainapp.urls')),
+    path('order/', include('orderapp.urls', namespace='order')),
     path('', index),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
